@@ -1,0 +1,12 @@
+---
+title: About
+date: 2020-12-01 22:45:10
+---
+
+Hello, I'm Johan Palmfjord 👋 I like code and techno. This website is mostly about coding and things related though.
+
+Within coding I specialize in full-stack development with React, Node and Java/Kotlin.
+
+You can of course find the source code for this website at [github.com/palmenhq/palmenhq.github.io](https://github.com/palmenhq/palmenhq.github.io).
+
+This website was built on top of [Hexo](https://hexo.io/) and with [probberechts/hexo-theme-cactus](https://github.com/probberechts/hexo-theme-cactus#install), many thanks for the awesome tooling. One day I will probably make my own theme (or fork this one), but until then this theme seems excellent 🙏 
