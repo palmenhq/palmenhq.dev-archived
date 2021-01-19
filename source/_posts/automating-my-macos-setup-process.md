@@ -1,20 +1,20 @@
 ---
 title: Automating my MacOS Setup Process
-date: 2020-12-07 20:12:11
+date: 2021-01-19 20:12:11
 tags:
     - ansible
     - automation
     - just-for-fun
 ---
 
-I recently got a new MacBook, and while setting up the environment can be fun in a way (that "new-and-shiny" feeling is really nice) it's also a bit tedious and time-consuming. Therefore I decided to make a little experiment to automate the setup, using [Ansible](https://www.ansible.com/) (a tool for automating provisioning of environments) and it's [local connection feature](https://docs.ansible.com/ansible/latest/user_guide/playbooks_delegation.html#local-playbooks). Here I'll describe the basics, you can find the full setup at [github](https://github.com/palmenhq/.macos-env).
+I recently got a new MacBook, and while setting up the environment can be fun in a way (that "new-and-shiny" feeling is really nice) it's also a bit tedious and time-consuming. Therefore I decided to make a little experiment to automate the setup, using [Ansible](https://www.ansible.com/) (a tool for automating provisioning of environments) and it's [local connection feature](https://docs.ansible.com/ansible/latest/user_guide/playbooks_delegation.html#local-playbooks). Here I'll describe the basics, you can find the full setup at [GitHub](https://github.com/palmenhq/.macos-env).
 
 
 ## About Ansible
 
 Ansible is a tool for provisioning environments, and server's in particular. It can be used to i.e. automate the deployment of your whole AWS account, but I'd recommend looking in to [Terraform](https://www.terraform.io/) instead for that although that's a different topic.
 
-Ansible follows a declarative philosophy - so you declare the state you want your environment to be in with Yaml files. When provisioning the environment Ansbile will figure out what changes might be needed in order for the target environment to end up in the desired state. 
+Ansible follows a declarative philosophy - so you declare the state you want your environment to be in with yaml files. When provisioning the environment Ansbile will figure out what changes might be needed in order for the target environment to end up in the desired state. 
 
 On MacOS, you can use [Homebrew](https://brew.sh/) to install Ansible (`brew install ansible`).
 
