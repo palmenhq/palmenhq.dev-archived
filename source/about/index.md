@@ -5,7 +5,7 @@ date: 2020-12-01 22:45:10
 
 Hello, I'm Johan Palmfjord 👋 I like code and techno. This website is mostly about coding and things related though.
 
-Within coding I specialize in full-stack development with React, Node and Java/Kotlin.
+Within coding I currently specialize in full-stack development with React, Node and Java/Kotlin. But I tend to stay curious, so this tech is likely to change as I and the world develop further.
 
 You can of course find the source code for this website at [github.com/palmenhq/palmenhq.github.io](https://github.com/palmenhq/palmenhq.github.io).
 
