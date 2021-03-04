@@ -15,7 +15,7 @@ direction: ltr
 nav:
   home: /
   about: /about/
-  articles: /archives/
+  articles: /annotated/
 
 
 # Links to your social media accounts.
