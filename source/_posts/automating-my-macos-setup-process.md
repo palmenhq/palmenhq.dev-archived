@@ -1,5 +1,5 @@
 ---
-title: Automating my MacOS Setup Process
+title: Automating My MacOS Setup Process
 date: 2021-01-19 20:12:11
 tags:
     - ansible
