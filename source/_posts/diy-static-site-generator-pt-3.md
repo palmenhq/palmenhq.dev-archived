@@ -313,7 +313,7 @@ Now, to develop, you run `yarn start`. When you're ready to deploy your site you
 
 ## Final words
 
-Voilà! We have now built a static site generator, and framework for asset processing!
+Voilà! We have now built a static site generator, and framework for asset processing! The full working example can be found at [palmenhq/static-site-generator#part-3](https://github.com/palmenhq/static-site-generator/tree/part-3) (which you can also compare against if something didn't work after following this tutorial).
 
 The point of this is of course not to spread the [not-invented-here syndrome](https://en.wikipedia.org/wiki/Not_invented_here), but rather prove that these fancy frameworks don't use sorcery - just some semi-advanced configuration. But over all, its not really that hard to create your own static site generator - as long as you know which components to glue together. 
 
