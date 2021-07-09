@@ -13,9 +13,9 @@ In this third part I will describe how to set up the asset build pipeline. Pleas
 
 ## Tools to the trade
 
-We already set up Sass, but we'll amend it with some improvements. Also we'll use Webpack (yes! you read that right) to bundle and process our Javascript. Additionally we will set up live reload (no hot reolading in this project, sorry :/) and watching, so you don't have to run `yarn build` and update the page manually on every file change to see the result.
+We already set up Sass, but we'll amend it with some improvements. Also we'll use Webpack (yup!) to bundle and process our Javascript. Additionally we will set up live reload (no hot reolading in this project, sorry :/) and watching, so you don't have to run `yarn build` and update the page manually on every file change to see the result.
 
-There are two hard things in computer science - naming (which I will not cover in this section) and cache invalidation. What the latter means, is that whenever we make a new release of our website, we want the browser's cache to be updated - meaning we don't serve the old content. "Can we not turn off caching to get rid of this problem?" you wonder. The simple answer is that we can, but it will make our website way less efficient than it should be. 
+There are two hard things in computer science - naming (which I will not cover in this section) and cache invalidation. What the latter means, is that whenever we make a new release of our website, we want the browser's cache to be updated - meaning we don't serve the old content. "Can we not turn off caching to get rid of this problem?" you wonder. The simple answer is that we can, but it will make our website way less efficient than it should be - downloading the same content over and over. 
 
 ### Cache busting for the styling
 
@@ -47,7 +47,7 @@ export const processSass = () =>
 
 If you run `NODE_ENV=production yarn build` (`NODE_ENV` lets us select `mode`), instead of getting a `index.css` in `dist/css`, you should see something like `index-7025eefd346ef6f3abad8d51e5d43ffa.css`.
 
-Now we have cache busting, but how do we get this filename in to our content? It'll change with its contents, leaving us no way of predicting it. This was the tricky part, but I ended up writing a little custom function that picks up all content hashes, letting us inject it into our templates:
+Now we have new file names when the content changes, but how do we get this, seemingly random, filename in to our content? It'll change with its contents, leaving us no way of predicting it. This was the tricky part, but I ended up writing a little custom function that picks up all content hashes, letting us inject it into our templates:
 
 ```js gulp/export-hash.js
 import { Transform } from 'stream'
@@ -106,7 +106,7 @@ html
             !{content}
 ```
 
-But where does the `files` variable come from now? We do, of course, need some glue to connect `fileRegistry` to our templates:
+But where does the `fileRegistry` variable come from now? We do, of course, need some glue to connect `fileRegistry` to our templates:
 
 ```js gulpfile/templates.js
 import { fileRegistry } from './export-hash.js'
@@ -177,13 +177,11 @@ export const processSass = () =>
 
 For the same reasons we apply post-processing to our CSS we'll want to do that to our JS. Also Sass takes care of bundling our scss files into one fat CSS file, whereas for the JS we'll need to take care of that ourselves. Hence we'll add the followig plugins; `yarn add -D gulp-webpack babel-loader @babel/core @babel/preset-env`
 
-- Webpck - Dewat?? Webpack? Yes, we're using Webpack inside Gulp, and we let it do what it does best - take many small files and put them into fat file. All other processing, we'll perform outside Webpack, in order to slim down the configuration ("raw" Webpack configs tend to grow).
+- Webpck - Dewat?? Webpack? Yes, we're using Webpack inside Gulp, and we let it do what it does best - take many small files and put them into fat file. We'll also let webpack do the work of transforming and minifying JS files.
 - Babel - For the same reason we want autoprefixer, we let babel take care of transforming our modern JS to old-school JS so older browsers understand it
-- Uglify - As for the same reason we want cssnano, we want Uglify to grind down our JS to decrease file size
 
 ```js gulpfile.js
 import babel from 'gulp-babel'
-import uglify from 'gulp-uglify'
 import webpack from 'gulp-webpack'
 
 // ...
@@ -193,10 +191,10 @@ export const processJs = () =>
     .src('src/js/index.js')
     .pipe(
       webpack({
-        mode: mode.development() ? 'development' : 'production', // What to optimize for
+        mode: mode.development() ? 'development' : 'production', // What to optimize for, ie whether to minify the code or not
         module: {
           rules: [
-            // Rules let us define custom file transformers, for example bable
+            // Rules let us define custom file transformers, for example babel
             {
               test: /\.js$/,
               exclude: /(node_modules)/,
@@ -212,7 +210,7 @@ export const processJs = () =>
         output: {
           filename: 'bundle.js',
         },
-        devtool: mode.development() ? 'source-map' : 'none', // Instead of using `babel-sourcemap` here we want Webpack to take care of our source maps, as that's the plugin that will include all other JS files
+        devtool: mode.development() ? 'source-map' : 'none', // Instead of using `gulp-sourcemaps` here we want Webpack to take care of our source maps, as that's the plugin that will include all other JS files
       })
     )
     .pipe(mode.production(hash()))
@@ -234,11 +232,7 @@ console.log('it works!')
 ```pug src/templates/index.pug
 // ...
     body
-        // `!` instead of `#` means we bypass the escaping of html characters
-        h1 !{headline}
-
-        .
-            !{content}
+        // ...
 
         script(src='/js' + (fileRegistry.get('/bundle.js') || '/bundle.js'))
 ```
@@ -295,11 +289,9 @@ export const watch = () => {
 }
 ```
 
-Finally, you will need to install this browser plugin for [Firefox](https://addons.mozilla.org/en-US/firefox/addon/livereload-web-extension/) or [Chrome](https://chrome.google.com/webstore/detail/livereload/jnihajbhpnppcggbcgedagnkighmdlei?hl=en). Why, do you ask? It'll listen to the live reload server, which signals to the browser extension whenever a file changed, and the browser extension will automatically reload the page. It's like the cheap version of [hot module replacement](https://stackoverflow.com/questions/24581873/what-exactly-is-hot-module-replacement-in-webpack).
+Finally, you will need to install a live reload browser plugin for [Firefox](https://addons.mozilla.org/en-US/firefox/addon/livereload-web-extension/) or [Chrome](https://chrome.google.com/webstore/detail/livereload/jnihajbhpnppcggbcgedagnkighmdlei?hl=en). Why, do you ask? It'll listen to the live reload server, which signals to the browser extension whenever a file changed, and the browser extension will automatically reload the page. It's like the cheap version of [hot module replacement](https://stackoverflow.com/questions/24581873/what-exactly-is-hot-module-replacement-in-webpack).
 
-As for the final step: We now have two ways of building our app; in development mode and production mode. You can start your development server (with source maps and live reload) with `NODE_ENV=development yarn gulp watch` and the production build with `NODE_ENV=production yarn gulp`. But in order to not have to remember these long commands, lets amend `package.json`:
-
-As a final step, live reload will build our files on every file change. However, we also need to concurrently serve the `dist` diretory to see our files in the browser. We'll use the `concurrently` package for this: `yarn add -D concurrently`. Now we can run `NODE_ENV=development yarn concurrently -n hs,gulp 'yarn hs dist' 'yarn gulp watch'` to develop very neatly. However, these are some long commands to remember, so lets ad them to `package.json`:
+As a final step, gulp watch will build our files on every file change. However, we also need to concurrently serve the `dist` directory to see our files in the browser. We'll use the `concurrently` package for this: `yarn add -D concurrently`. Now we can run `NODE_ENV=development yarn concurrently -n hs,gulp 'yarn hs dist' 'yarn gulp watch'` to develop very neatly. As for the production build, we'll need to run it like `NODE_ENV=production yarn gulp`. However, these are some long commands to remember, so lets ad them to `package.json`:
 
 ```json package.json
   "scripts": {
@@ -309,7 +301,7 @@ As a final step, live reload will build our files on every file change. However,
   },
 ```
 
-Now, to develop, you run `yarn start`. When you're ready to deploy your site you run `yarn build`. To start a simplistic local dev server you can run `yarn serve` to serve the built `dist` directory.
+Now, to develop, you run `yarn start`. When you're ready to deploy your site you run `yarn build`. To test your site after building for production, you can run `yarn serve` to serve the built `dist` directory.
 
 ## Final words
 

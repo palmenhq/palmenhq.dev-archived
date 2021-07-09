@@ -210,6 +210,6 @@ Now, running `yarn build` and `yarn hs` should show you something like this:
 
 ![screenshot](screenshot.png)
 
-For a fully working example of everything stitched together, see the git repo [palmenhq/static-site#part-2](https://github.com/palmenhq/static-site-generator/tree/part-2).
+For a fully working example of everything stitched together, see the git repo [palmenhq/static-site-generator#part-2](https://github.com/palmenhq/static-site-generator/tree/part-2).
 
 Continue to {% post_link diy-static-site-generator-pt-3 "part 3" %} for how to build the asset pipeline.

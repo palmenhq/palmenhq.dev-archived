@@ -62,6 +62,14 @@ export const processSass = () =>
 export default gulp.series(copyAssets, processSass) // Run `copyAssets` and `processSass` when you run `yarn gulp`
 ```
 
+```scss src/scss/index.scss
+body {
+  background: pink;
+  color: red;
+  font-family: "Comic Sans MS", sans-serif;
+}
+```
+
 Please note that in order to use the ESModules (`import` statements) you'll need to put `"type": "module"` in `package.json`.
 
 A working example of the above code can be found on GitHub: [palmenhq/static-site-generator#part-1](https://github.com/palmenhq/static-site-generator/tree/part-1)
