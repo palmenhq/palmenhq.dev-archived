@@ -177,7 +177,7 @@ export const processSass = () =>
 
 For the same reasons we apply post-processing to our CSS we'll want to do that to our JS. Also Sass takes care of bundling our scss files into one fat CSS file, whereas for the JS we'll need to take care of that ourselves. Hence we'll add the followig plugins; `yarn add -D gulp-webpack babel-loader @babel/core @babel/preset-env`
 
-- Webpck - Dewat?? Webpack? Yes, we're using Webpack inside Gulp, and we let it do what it does best - take many small files and put them into fat file. We'll also let webpack do the work of transforming and minifying JS files.
+- Webpack - Dewat?? Webpack? Yes, we're using Webpack inside Gulp, and we let it do what it does best - take many small files and put them into fat file. We'll also let webpack do the work of transforming and minifying JS files.
 - Babel - For the same reason we want autoprefixer, we let babel take care of transforming our modern JS to old-school JS so older browsers understand it
 
 ```js gulpfile.js
