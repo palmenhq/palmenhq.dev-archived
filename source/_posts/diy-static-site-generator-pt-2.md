@@ -141,7 +141,7 @@ We'll amend with the following code:
 template = "index.pug"
 
 title = "Hello" # And, for now, Goodbye for goodbye.toml
-headline = "inlinemd:A beautiful headline with _italic_ content" ## We don't want markdown to automaticall add `<p>` tags here
+headline = "inlinemd:A beautiful headline with _italic_ content" ## We don't want markdown to automatically add `<p>` tags here
 content = """md:
 ## A sub headline
 
