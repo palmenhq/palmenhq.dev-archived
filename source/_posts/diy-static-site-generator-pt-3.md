@@ -1,6 +1,6 @@
 ---
 title: DIY Static Site Generator in an Afternoon - Part 3
-date: 2021-07-09 08:32:02
+date: 2021-07-09 18:32:02
 tags:
 - web
 - javascript
