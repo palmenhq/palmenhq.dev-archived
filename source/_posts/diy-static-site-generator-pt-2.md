@@ -183,7 +183,7 @@ stream._transform = async function (chunk, _unused, callback) {
           // If we prefix the string config value with `inlinemd:` that means we want to parse it as inline markdown
           value.startsWith('inlinemd:')
         ) {
-          return [key, marked.parseInline(value.replace('inlinemd:', ''), {})] // same thing as the `md:` prefix, but od it inline
+          return [key, marked.parseInline(value.replace('inlinemd:', ''), {})] // same thing as the `md:` prefix, but do it inline
         } else {
           // This should not be parsed as markdown
           return [key, value]
