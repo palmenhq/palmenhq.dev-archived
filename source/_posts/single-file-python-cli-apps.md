@@ -7,11 +7,11 @@ tags:
     - cli
 ---
 
-When writing CLI applications I often find myself deciding on whether to use Go or Python - the former creating single-file (binary) executables (handy for distribution), and the latter being easy to develop. However, I recently discovered [zipapp](https://docs.python.org/3/library/zipapp.html); A part of the Python standard library that takes your Python files and shoves them into a single (zipped) file that you can execute - giving most of the benefits Go binaries have.
+When writing CLI applications I often find myself deciding on whether to use Go or Python - the former creating single-file (binary) executables (handy for distribution), and the latter being easy to develop. However, I recently discovered [zipapp](https://docs.python.org/3/library/zipapp.html); A part of the Python standard library that takes your Python files and shoves them into a single (zipped) file that you can execute - giving one of the benefits Go binaries have (with them otherwise being quite significantly different).
 
 ## How to use Zipapp
 
-Zipapp is a Python stdlib module that takes your files in a package, zips 'em to a single file Python can interpret. Here's an example of a useless application packaged with zipapp:
+Zipapp is a Python stdlib module that takes your files in a package and zips 'em to a single file Python can interpret. Here's an example of a useless application packaged with zipapp:
 
 ```py greet/__main__.py
 import sys
@@ -52,7 +52,16 @@ Ok let's complicate this by using an external pip module. Zipapp won't automatic
 cowsay==4.0
 ```
 
+```py greet/greeter.py
+from cowsay import cow
+
+
+def greet(string):
+    cow("Hello, " + string)
+```
+
 Now to package our app:
+
 
 ```
 $ pip3 install -r requirements.txt --target greet
