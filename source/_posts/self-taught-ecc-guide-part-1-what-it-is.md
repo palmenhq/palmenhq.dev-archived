@@ -1,6 +1,6 @@
 ---
 title: The self-taught Elliptic Curve Cryptography Guide - Part 1 (What it is)
-date: 2022-01-26 11:24:32
+date: 2022-02-04 11:24:32
 tags:
     - cryptography
     - explained
