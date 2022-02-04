@@ -28,7 +28,7 @@ A byte can hold one of 256 values (`2^8 = 256`), and can thus be represented as 
 
 ### Base64
 
-Another format is base64, consisting of all upper- and lowercase alphanumerics in ascii, `+` and `/` (`a-zA-Z0-0+/`). For example the byte string `0cccd5ac72166379` can be represented as `DMzVrHIWY3k`.
+Another format is base64, consisting of all upper- and lowercase alphanumerics in ascii, `+` and `/` (`a-zA-Z0-9+/`). For example the hex string `0cccd5ac72166379` can be represented as `DMzVrHIWY3k`.
 
 ### Try it
 
@@ -65,11 +65,11 @@ X��|)���_�%
 
 ## Symmetric and Asymmetric Cryptography
 
-Modern cryptography is based on both symmetric and asymmetric cryptography (in encryption, commonly a combination of both (using a Diffie-Hellman Key Exchange, but that's out of scope for these blog posts). The difference is easy to recognize; in symmetric cryptography you're encrypting using a pre-shared key (such as a password), while asymmetric cryptography is based on public/private key pairs.
+Modern cryptography is based on both symmetric and asymmetric cryptography (in encryption, commonly a combination of both (using a Diffie-Hellman Key Exchange, but that's out of scope for these blog posts)). The difference is easy to recognize; in symmetric cryptography you're encrypting using a pre-shared key (such as a password), while asymmetric cryptography is based on public/private key pairs.
 
 ### Symmetric Cryptography With a Pre-shared Key
 
-Conceptually symmetric cryptography is simple; You're using a pre-shared key as the input for your encryption algorithm when encrypting. When decrypting, the same pre-shared key is used as input for the decryption algorithm. The upside is that symmetric cryptography is usually _very fast_, and sometimes even has [hardware support](https://en.wikipedia.org/wiki/AES_instruction_set). However, both parties need to know the pre-shared key. Without a secure (already encrypted) channel, there's no way of sharing that key without the risk of a [man-in-the-middle](https://en.wikipedia.org/wiki/Man-in-the-middle_attack) intercepting it, leaving us with a catch-22. However, it is possible to get around this using a Diffie-Hellman Key Exchange (again, out of scope) in this series, but I'd recommend reading it in order).
+Conceptually symmetric cryptography is simple; You're using a pre-shared key as the input for your encryption algorithm when encrypting. When decrypting, the same pre-shared key is used as input for the decryption algorithm. The upside is that symmetric cryptography is usually _very fast_, and sometimes even has [hardware support](https://en.wikipedia.org/wiki/AES_instruction_set). However, both parties need to know the pre-shared key. Without a secure (already encrypted) channel, there's no way of sharing that key without the risk of a [man-in-the-middle](https://en.wikipedia.org/wiki/Man-in-the-middle_attack) intercepting it, leaving us with a catch-22. It is possible to get around this using a Diffie-Hellman Key Exchange, but again - out of scope.
 
 ### Asymmetric Cryptography With a Key Pair
 
@@ -108,11 +108,11 @@ PK = q % p = 17 % 7 = 3
 
 So our private key is the combination of `q` and `p` (`17` and `7`), and the public key is derived as `q % p`, `17 % 7` - meaning it becomes `3`. Real world algorithms (such as elliptic curves and RSA) are much more sophisticated, and of course use much bigger numbers (RSA for example commonly uses 2048 or 4096 bits), but this should give you an idea of how public and private keys are related.
 
-The downside of asymmetric cryptography is that encryption and decryption becomes _very slow_ (commonly algorithms are not even capable of encrypting arbitrarily-sized payloads), which makes it ill-suited to directly encrypt messages with asymmetric crypto. Again, that's why it can be combined with symmetric cryptography to make encryption feasible (again, as covered later).
+The downside of asymmetric cryptography is that encryption and decryption becomes _very slow_ (commonly algorithms are not even capable of encrypting arbitrarily-sized payloads), which makes it ill-suited to directly encrypt messages with asymmetric crypto.
 
 ## RSA vs ECC
 
-There are different types of asymmetric cryptography algorithms, RSA and Elliptic Curves (notice plural, there's multiple types of ECC) being the major players (I'm not even sure there are other options? Probably there are though). RSA is older and uses fairly simple mathematical functions (which I will not dive in). It is easier to crack with enough computing power. That can be countered by using larger key sizes (the minimum key size recommended is 2048 bits nowadays). However, larger key sizes mean more payload to transfer and more work to perform, so I personally believe RSA is dying. This is why Elliptic Curves fascinate me - by using more sophisticated algorithms you can achieve the same (or stronger) security with smaller key sizes!
+There are different types of asymmetric cryptography algorithms, RSA and Elliptic Curves (notice plural, there's multiple types of ECC) being the major players (I'm not even sure there are other options? Probably there are though). RSA is older and uses fairly simple mathematical functions (which I will not dive in). It is easier to crack with enough computing power. That can be countered by using larger key sizes. However, larger key sizes mean more payload to transfer and more work to perform. This is why Elliptic Curves fascinate me - by using more sophisticated algorithms you can achieve the same (or stronger) security with smaller key sizes!
 
 ## Elliptic Curves
 
@@ -139,7 +139,7 @@ b) the output is always the same number of bytes (ie 32 for SHA2)
 c) making even a small change to the input will change the output drastically
 d) for hashing algorithms considered secure (such as SHA2) you cannot predict or reverse the hash without a lookup table, so it's hard/impossible to derive the input value from the output value
 
-Some algorithms include MD5, SHA1 and SHA2 (aka SHA256, because - again - why have one name when you can have multiple 🌞). MD5 is generally considered broken due to it being relatively to generate hash collisions (two different inputs that produce the same output), and same goes for SHA1 (except for when used in MAC, but that's for another chapter). SHA2 on the other hand is still considered secure.
+Some algorithms include MD5, SHA1 and SHA2 (aka SHA256, because - again - why have one name when you can have multiple 🌞). MD5 is generally considered broken due to it being relatively to generate hash collisions (two different inputs that produce the same output), and same goes for SHA1 (except for when used in Message Authentication, but that's for another chapter). SHA2 on the other hand is still considered secure.
 
 ```txt
 Some hex encoded examples of SHA2 checksums
@@ -152,7 +152,7 @@ SHA2(my website's png logo) -> 2c9be80039a4a8a8517fe68f23763defbb00ead0ae4da5a80
 
 ### Try it
 
-Most unix systems come with a command to calculate shasums;
+You can use the OpenSSL CLI to generate sha2 sums.
 
 ```sh
 $ printf a | openssl sha256 # sha2("a")

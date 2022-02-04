@@ -12,11 +12,11 @@ The {% post_link "self-taught-ecc-guide-part-1-what-it-is" "first part" %} will 
 
 ## Key Formats
 
-There are different key formats and encodings for cryptographic keys and other artifacts, I will try to summarize a couple of common ones here.
+There are different key formats and encodings for cryptographic keys and other artifacts. I will try to summarize a couple of common ones here.
 
 ### ASN.1 and DER
 
-Most cryptographic assets (keys, certificates etc.) build on ASN.1, which is a way to describe how to (de)serialize data (think JSON-schema). The most common format for cryptographic assets is DER. An example of an ANS.1 module (data description) and example serialization using DER might look something like this:
+Most cryptographic assets (keys, certificates etc.) build on ASN.1, which is a way to describe how to (de)serialize data (think JSON-schema). The most common format for cryptographic assets is DER. An example of an ASN.1 module (data description) and example serialization using DER might look something like this:
 
 ```asn1
 Point ::= SEQUENCE {
@@ -92,7 +92,7 @@ SEQUENCE (4 elem)
   // the actual key private key:
   OCTET STRING (32 byte) 990AF4F299B67FD0DBBFE1F4CB25D9384104F4FFEFEE19F874C7EDA665D0C129
   [0] (1 elem)
-    // description of the public key (this key is a NIST P-256 aka prive256v1)
+    // description of the public key (this key is a NIST P-256 aka prime256v1)
     OBJECT IDENTIFIER 1.2.840.10045.3.1.7 prime256v1 (ANSI X9.62 named elliptic curve)
   [1] (1 elem)
     // the actual public key in bits
@@ -120,7 +120,7 @@ f874c7eda665d0c129a00a06082a8648ce3d030107a12403220002a1f631
 d7e1b62618d5733b2fbcfa7b2717a669228a95ed0a5c6f891cc2b2d96d
 ```
 
-ANS.1 decoder result:
+[ASN.1 decoder result](https://lapo.it/asn1js/#MFkwEwYHKoZIzj0CAQYIKoZIzj0DAQcDQgAEofYx1-G2JhjVczsvvPp7JxemaSKKle0KXG-JHMKy2W0Hy5xcrfhGAi1KShcl0kEC9hEqufN4-UO3HvGMKqY7AA):
 
 ```pem
 SEQUENCE (2 elem)
@@ -276,9 +276,11 @@ le0KXG+JHMKy2W0Hy5xcrfhGAi1KShcl0kEC9hEqufN4+UO3HvGMKqY7AA==
 
 ## Key Fingerprinting
 
-A common way of identifying key pairs is by using key fingerprinting. A key fingerprint is commonly just a hash (or part of a hash) of the public key. However, when you do make a fingerprint of a key, it is extremely important that you always use the same (expected) form of public key. As you should understand by now, performing `sha2(public key pem)` will yield something completely different to performing `sha2(raw uncompressed public key)`, just like `sha2(spki-encoded public key)` will be equally different. In addition, `sha2(hex encoded uncompressed public key)` will be completely different form `sha2(raw uncompressed public key)`.
+A common way of identifying key pairs is by using key fingerprinting. A key fingerprint is commonly just a hash (or part of a hash) of the public key. However, when you do make a fingerprint of a key, it is extremely important that you always use the same (expected) form of public key. As you should understand by now, performing `sha2(public key pem)` will yield something completely different to performing `sha2(raw uncompressed public key)`, just like `sha2(spki-encoded public key)` will be equally different. In addition, `sha2(hex encoded uncompressed public key)` will be completely different from `sha2(raw uncompressed public key)`.
 
-A common application of key fingerprinting is within the crypto-currency community. For example, Ethereum addresses are just public key fingerprints. They are derived from the public key by using the last 20 bytes of a hash of the raw uncompressed form of the public key (without the leading `04` byte). It's not an optimal example because Ethereum uses curve secp256k1 public keys (instead of secp256v1 that I've described so far, but from what I've understood they are very similar), and Keccak-256 hashing (that later evolved into SHA3, but they are not the same), while I've described SHA2. However, the principle is exactly the same. An Ethereum address can thus be derived from its private key by using; `last_20_bytes(Keccak256(raw public key))`. Here's an example (you can try it by using an [online keccak-256 hasher](https://emn178.github.io/online-tools/keccak_256.html));
+A common application of key fingerprinting is within the crypto-currency community. For example, Ethereum addresses are just public key fingerprints. They are derived from the public key by using the last 20 bytes of a hash of the raw uncompressed form of the public key (without the leading `04` byte). It's not an optimal example because Ethereum uses curve secp256k1 public keys (instead of secp256v1 that I've described so far, but from what I've understood they are very similar), and Keccak-256 hashing (that later evolved into SHA3, but they are not the same), while I've described SHA2. However, the principle is exactly the same.
+
+An Ethereum address can thus be derived from its public key by using; `last_20_bytes(Keccak256(raw public key))`. Here's an example (you can try it by using an [online keccak-256 hasher](https://emn178.github.io/online-tools/keccak_256.html));
 
 ```text
 Raw uncompressed public key:
@@ -298,7 +300,7 @@ Taking the last 20 bytes (40 hex characters) gives us the address (prefixed with
 0x00b54e93ee2eba3086a55f4249873e291d1ab06c
 ```
 
-You can try it yourself by using an [Ethereum key-to-address converter](https://toolkit.abdk.consulting/ethereum#recover-address,key-to-address) Commonly Ethereum hex strings are prefixed with `0x`, but as you know this is not part of the hex value.
+You can validate it by using an [Ethereum key-to-address converter](https://toolkit.abdk.consulting/ethereum#recover-address,key-to-address). Commonly Ethereum hex strings are prefixed with `0x`, but as you know this is not part of the hex value.
 
 ## Conclusion
 
