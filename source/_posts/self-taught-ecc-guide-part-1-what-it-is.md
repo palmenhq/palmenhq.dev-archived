@@ -8,7 +8,7 @@ tags:
 
 For the last few months I’ve spent some time learning about crypto (not the hype kind of crypto, just OG cryptography). In this blog series I will try to summarize my learnings so far. I’m far from an expert, especially when it comes to the math behind it all, but I figured I’ve learnt a lot and want to share those learnings. But please; use a well-known library (such as OpenSSL) for your crypto implementations - never roll your own crypto. With that said, knowing some theory behind it will help you greatly when using the libraries.
 
-The first part will mostly cover the theory that will enable you to actually understand what’s happening in the second, hands-on, part. I do recommend spending time with the theory before diving into the practical stuff, but feel free to skip ahead if you know some concepts already.
+The first part will mostly cover the theory that will enable you to actually understand what’s happening in {% post_link "self-taught-ecc-guide-part-2-hands-on" "the second" %}, more hands-on, part. I do recommend spending time with the theory before diving into the practical stuff, but feel free to skip ahead if you know some concepts already.
 
 ## Binary-formats Memory Refresh (don't skip me please)
 
@@ -65,11 +65,11 @@ X��|)���_�%
 
 ## Symmetric and Asymmetric Cryptography
 
-Modern cryptography is based on both symmetric and asymmetric cryptography (in encryption, commonly [a combination of both](../self-taught-elliptic-curve-cryptography-guide-part-2-hands-on-prep/#Diffie-Hellman-Key-Exchange-DH-ECDH "Diffie-Hellman Key Exchange (DH/ECDH)")). The difference is easy to recognize; in symmetric cryptography you're encrypting using a pre-shared key (such as a password), while asymmetric cryptography is based on public/private key pairs.
+Modern cryptography is based on both symmetric and asymmetric cryptography (in encryption, commonly a combination of both (using a Diffie-Hellman Key Exchange, but that's out of scope for these blog posts). The difference is easy to recognize; in symmetric cryptography you're encrypting using a pre-shared key (such as a password), while asymmetric cryptography is based on public/private key pairs.
 
 ### Symmetric Cryptography With a Pre-shared Key
 
-Conceptually symmetric cryptography is simple; You're using a pre-shared key as the input for your encryption algorithm when encrypting. When decrypting, the same pre-shared key is used as input for the decryption algorithm. The upside is that symmetric cryptography is usually _very fast_, and sometimes even has [hardware support](https://en.wikipedia.org/wiki/AES_instruction_set). However, both parties need to know the pre-shared key. Without a secure (already encrypted) channel, there's no way of sharing that key without the risk of a [man-in-the-middle](https://en.wikipedia.org/wiki/Man-in-the-middle_attack) intercepting it, leaving us with a catch-22. However, it is possbile to get around this using a Diffie-Hellman Key Exchange (which is [covered later](../self-taught-elliptic-curve-cryptography-guide-part-2-hands-on-prep/#Diffie-Hellman-Key-Exchange-DH-ECDH "Diffie-Hellman Key Exchange (DH/ECDH)") in this series, but I'd recommend reading it in order).
+Conceptually symmetric cryptography is simple; You're using a pre-shared key as the input for your encryption algorithm when encrypting. When decrypting, the same pre-shared key is used as input for the decryption algorithm. The upside is that symmetric cryptography is usually _very fast_, and sometimes even has [hardware support](https://en.wikipedia.org/wiki/AES_instruction_set). However, both parties need to know the pre-shared key. Without a secure (already encrypted) channel, there's no way of sharing that key without the risk of a [man-in-the-middle](https://en.wikipedia.org/wiki/Man-in-the-middle_attack) intercepting it, leaving us with a catch-22. However, it is possible to get around this using a Diffie-Hellman Key Exchange (again, out of scope) in this series, but I'd recommend reading it in order).
 
 ### Asymmetric Cryptography With a Key Pair
 
@@ -122,7 +122,7 @@ I try to think of Elliptic Curve Cryptography as a category of cryptographic alg
 
 According to [malware.news](https://malware.news/t/everyone-loves-curves-but-which-elliptic-curve-is-the-most-popular/17657) (a source I'm not sure about the trustworthiness of), the most common curves are NIST P-256 and Curve25519. That fact feels aligned with my experience of usage though, so I'll take their word for it. Anyways, in these blog posts I will only use NIST P-256, to not make an already confusing subject more confusing.
 
-  * **Note** - *The NIST P-256 curve is also known as Secp256v1 and Secp256r1, and not to be confused with Secp256k1 (which is slightly different) - because why have one name when you can have three* 🌞 
+  * **Note** - *The NIST P-256 curve is also known as Prime256v1 and Secp256r1, and not to be confused with Secp256k1 (which is different) - because why have one name when you can have three* 🌞 
 
 ### NIST P-256
 
@@ -155,20 +155,20 @@ SHA2(my website's png logo) -> 2c9be80039a4a8a8517fe68f23763defbb00ead0ae4da5a80
 Most unix systems come with a command to calculate shasums;
 
 ```sh
-$ printf a | shasum -a 256 # perform sha2("a")
+$ printf a | openssl sha256 # sha2("a")
 ca978112ca1bbdcafac231b39a23dc4da786eff8147c4e72b9807785afee48bb
 # We're using printf instead of `echo` because `echo` will include a newline
 # which produces a different result:
-$ echo a | shasum -a 256 # sha2("a\n")
+$ echo a | openssl sha256 # sha2("a\n")
 87428fc522803d31065e7bce3cf03fe475096631e5e07bbd7a0fde60c4cf25c7
 
 # as you know, these strings are just different formats,
 # so this is also true
-$ printf 61 | xxd -r -p | shasum -a 256 # sha2(hexToAscii(0x61))
+$ printf 61 | xxd -r -p | openssl sha256 # sha2(hexToAscii(0x61))
 ca978112ca1bbdcafac231b39a23dc4da786eff8147c4e72b9807785afee48bb
 # ☝️ same result as sha2("a")
 ```
 
 ## Continue
 
-In {% post_link "self-taught-ecc-guide-part-2-hands-on" "part 2" %} I will cover some implementation details and how to apply this knowledge with the help of both Node's crypto bindings and OpenSSL's CLI.
+In {% post_link "self-taught-ecc-guide-part-2-hands-on" "part 2" %} I will cover some implementation details and how to apply this knowledge with the help of OpenSSL's CLI.
