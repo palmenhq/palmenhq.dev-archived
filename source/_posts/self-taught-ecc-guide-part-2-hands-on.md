@@ -1,6 +1,6 @@
 ---
 title: The self-taught Elliptic Curve Cryptography Guide - Part 2 (Hands-on)
-date: 2022-02-04 12:24:33
+date: 2022-03-11 12:24:33
 tags:
     - cryptography
     - explained
@@ -60,7 +60,7 @@ Let's break down the hex bytes:
     02 01 // 1st item, an integer (data type 02) of 1 byte
         09 // value 9
     02 01 // 2nd item, an integer of 1 byte
-        70 // value 112 in hex
+        70 // 112 = hex 70
     12 08 // 3rd item, a utf8 string (12) of 8 bytes
         6d 79 20 70 6f 69 6e 74 // "my point" in hex    
 ```
@@ -85,6 +85,8 @@ As you can see, it starts and ends with a label (`BEGIN|END EC PRIVATE KEY`), an
 
 A private key can be represented in multiple forms but the variant described in SEC 1 (the paper can be found at [Standards for Efficient Cryptography Group's website](http://www.secg.org/)) is common (and the default output OpenSSL uses). Let's introspect the above private key using the ASN.1 debugger (paste it or use [this link](https://lapo.it/asn1js/#MHcCAQEEIJkK9PKZtn_Q27_h9Msl2ThBBPT_7-4Z-HTH7aZl0MEpoAoGCCqGSM49AwEHoUQDQgAEofYx1-G2JhjVczsvvPp7JxemaSKKle0KXG-JHMKy2W0Hy5xcrfhGAi1KShcl0kEC9hEqufN4-UO3HvGMKqY7AA));  
 
+From the ASN.1 debugger:
+
 ```txt
 SEQUENCE (4 elem)
   // version:
@@ -97,6 +99,25 @@ SEQUENCE (4 elem)
   [1] (1 elem)
     // the actual public key in bits
     BIT STRING (520 bit) 0000010010100001111101100011000111010111111000011011011000100110000110…
+```
+
+Hex notation;
+
+```c
+// sequence (type 0x30) of length 0x77 (119)
+30 77
+    // int (type 0x02) of length 0x01, value 0x01 = being version 1
+    02 01 01
+    // the embedded private key
+    04 20 990af4f299b67fd0dbbfe1f4cb25d9384104f4ffefee19f874c7eda665d0c129
+    // key identifier (list of which type of key this is)
+    a0 0a
+        // object identifier for secp256r1
+        06 08 2a8648ce3d030107
+    // public key
+    a1 44
+        // 66 byte (0x42) bit string (the actual public key)
+        03 42 0004a1f631d7e1b62618d5733b2fbcfa7b2717a669228a95ed0a5c6f891cc2b2d96d07cb9c5cadf846022d4a4a1725d24102f6112ab9f378f943b71ef18c2aa63b00
 ```
 
 Another common standard is [PKCS#8](https://en.wikipedia.org/wiki/PKCS_8) (PKCS is a set of numbered standards, so #8 doesn't mean version 8, it's a completely different standard to i.e. PKCS#12, took me a while to realize), but I will scope that out to keep these blog posts less huge.
@@ -278,7 +299,7 @@ le0KXG+JHMKy2W0Hy5xcrfhGAi1KShcl0kEC9hEqufN4+UO3HvGMKqY7AA==
 
 A common way of identifying key pairs is by using key fingerprinting. A key fingerprint is commonly just a hash (or part of a hash) of the public key. However, when you do make a fingerprint of a key, it is extremely important that you always use the same (expected) form of public key. As you should understand by now, performing `sha2(public key pem)` will yield something completely different to performing `sha2(raw uncompressed public key)`, just like `sha2(spki-encoded public key)` will be equally different. In addition, `sha2(hex encoded uncompressed public key)` will be completely different from `sha2(raw uncompressed public key)`.
 
-A common application of key fingerprinting is within the crypto-currency community. For example, Ethereum addresses are just public key fingerprints. They are derived from the public key by using the last 20 bytes of a hash of the raw uncompressed form of the public key (without the leading `04` byte). It's not an optimal example because Ethereum uses curve secp256k1 public keys (instead of secp256v1 that I've described so far, but from what I've understood they are very similar), and Keccak-256 hashing (that later evolved into SHA3, but they are not the same), while I've described SHA2. However, the principle is exactly the same.
+A common application of key fingerprinting is within the crypto-currency community. For example, Ethereum addresses are just public key fingerprints. They are derived from the public key by using the last 20 bytes of a hash of the raw uncompressed form of the public key (without the leading `04` byte). It's not an optimal example because Ethereum uses curve secp256k1 public keys (instead of secp256r1 that I've described so far, but from what I've understood they are very similar), and Keccak-256 hashing (that later evolved into SHA3, but they are not the same), while I've described SHA2. However, the principle is exactly the same.
 
 An Ethereum address can thus be derived from its public key by using; `last_20_bytes(Keccak256(raw public key))`. Here's an example (you can try it by using an [online keccak-256 hasher](https://emn178.github.io/online-tools/keccak_256.html));
 

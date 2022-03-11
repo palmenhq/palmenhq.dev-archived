@@ -1,6 +1,6 @@
 ---
 title: The self-taught Elliptic Curve Cryptography Guide - Part 1 (What it is)
-date: 2022-02-04 11:24:32
+date: 2022-03-11 11:24:32
 tags:
     - cryptography
     - explained
@@ -139,7 +139,7 @@ b) the output is always the same number of bytes (ie 32 for SHA2)
 c) making even a small change to the input will change the output drastically
 d) for hashing algorithms considered secure (such as SHA2) you cannot predict or reverse the hash without a lookup table, so it's hard/impossible to derive the input value from the output value
 
-Some algorithms include MD5, SHA1 and SHA2 (aka SHA256, because - again - why have one name when you can have multiple 🌞). MD5 is generally considered broken due to it being relatively to generate hash collisions (two different inputs that produce the same output), and same goes for SHA1 (except for when used in Message Authentication, but that's for another chapter). SHA2 on the other hand is still considered secure.
+Some algorithms include MD5, SHA1 and SHA2 (aka SHA256, because - again - why have one name when you can have multiple 🌞). MD5 is generally considered broken because it's relatively easy to generate hash collisions (two different inputs that produce the same output), and same goes for SHA1 (except for when used in Message Authentication, but that's for another chapter). SHA2 on the other hand is still considered secure.
 
 ```txt
 Some hex encoded examples of SHA2 checksums
