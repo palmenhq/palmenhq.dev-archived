@@ -135,38 +135,38 @@ The concept of hashing is very important in crypto. I just think of hashing algo
 They do have some other important traits, specifically;
 
 a) given the same input, they will always give the same output
-b) the output is always the same number of bytes (ie 32 for SHA2)
+b) the output is always the same number of bytes (ie 32 for SHA256)
 c) making even a small change to the input will change the output drastically
-d) for hashing algorithms considered secure (such as SHA2) you cannot predict or reverse the hash without a lookup table, so it's hard/impossible to derive the input value from the output value
+d) for hashing algorithms considered secure (such as SHA256) you cannot predict or reverse the hash without a lookup table, so it's hard/impossible to derive the input value from the output value
 
-Some algorithms include MD5, SHA1 and SHA2 (aka SHA256, because - again - why have one name when you can have multiple 🌞). MD5 is generally considered broken because it's relatively easy to generate hash collisions (two different inputs that produce the same output), and same goes for SHA1 (except for when used in Message Authentication, but that's for another chapter). SHA2 on the other hand is still considered secure.
+Some algorithms include MD5, SHA1 and SHA256. MD5 is generally considered broken because it's relatively easy to generate hash collisions (two different inputs that produce the same output), and same goes for SHA1 (except for when used in Message Authentication, but that's for another chapter). SHA256 on the other hand is still considered secure.
 
 ```txt
-Some hex encoded examples of SHA2 checksums
-SHA2("a")                   -> ca978112ca1bbdcafac231b39a23dc4da786eff8147c4e72b9807785afee48bb
-SHA2("abc")                 -> ba7816bf8f01cfea414140de5dae2223b00361a396177a9cb410ff61f20015ad
-SHA2(my website's png logo) -> 2c9be80039a4a8a8517fe68f23763defbb00ead0ae4da5a803f304a0e617cc0d
+Some hex encoded examples of SHA256 checksums
+SHA256("a")                   -> ca978112ca1bbdcafac231b39a23dc4da786eff8147c4e72b9807785afee48bb
+SHA256("abc")                 -> ba7816bf8f01cfea414140de5dae2223b00361a396177a9cb410ff61f20015ad
+SHA256(my website's png logo) -> 2c9be80039a4a8a8517fe68f23763defbb00ead0ae4da5a803f304a0e617cc0d
 ```
 
 * **Note** *Take careful note of the input format here. Inputting literally the ascii char `a` will give the checksum `ca978112ca1bbdcafac231b39a23dc4da786eff8147c4e72b9807785afee48bb`. However, `a` can also be represented as `0x61` in hex, but inputting literally `61` will give the checksum `d029fa3a95e174a19934857f535eb9427d967218a36ea014b70ad704bc6c8d1c`. It is thus good practice to, whenever possible, use the raw representation of the thing you're hashing.*
 
 ### Try it
 
-You can use the OpenSSL CLI to generate sha2 sums.
+You can use the OpenSSL CLI to generate sha sums.
 
 ```sh
-$ printf a | openssl sha256 # sha2("a")
+$ printf a | openssl sha256 # sha256("a")
 ca978112ca1bbdcafac231b39a23dc4da786eff8147c4e72b9807785afee48bb
 # We're using printf instead of `echo` because `echo` will include a newline
 # which produces a different result:
-$ echo a | openssl sha256 # sha2("a\n")
+$ echo a | openssl sha256 # sha256("a\n")
 87428fc522803d31065e7bce3cf03fe475096631e5e07bbd7a0fde60c4cf25c7
 
 # as you know, these strings are just different formats,
 # so this is also true
-$ printf 61 | xxd -r -p | openssl sha256 # sha2(hexToAscii(0x61))
+$ printf 61 | xxd -r -p | openssl sha256 # sha256(hexToAscii(0x61))
 ca978112ca1bbdcafac231b39a23dc4da786eff8147c4e72b9807785afee48bb
-# ☝️ same result as sha2("a")
+# ☝️ same result as sha256("a")
 ```
 
 ## Continue
