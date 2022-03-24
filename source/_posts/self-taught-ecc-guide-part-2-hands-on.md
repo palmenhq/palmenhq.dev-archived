@@ -6,9 +6,9 @@ tags:
     - explained
 ---
 
-For the last few months I’ve spent some time learning about crypto (not the hype kind of crypto, just OG cryptography). In this blog series I will try to summarize my learnings so far. I’m far from an expert, especially when it comes to the math behind it all, but I figured I’ve learnt a lot and want to share those learnings. But please; use a well-known library (such as OpenSSL) for your crypto implementations - never roll your own crypto. With that said, knowing some theory behind it will help you greatly when using the libraries.
+_For the last few months I’ve spent some time learning about crypto (not the hype kind of crypto, just OG cryptography). In this blog series I will try to summarize my learnings so far. I’m far from an expert, especially when it comes to the math behind it all, but I figured I’ve learnt a lot and want to share those learnings. But please; use a well-known library (such as OpenSSL) for your crypto implementations - never roll your own crypto. With that said, knowing some theory behind it will help you greatly when using the libraries._
 
-The {% post_link "self-taught-ecc-guide-part-1-what-it-is" "first part" %} will mostly cover the theory that will enable you to actually understand what’s happening in this second, more hands-on, part. I do recommend spending time with the theory before diving into the practical stuff, but feel free to skip ahead if you know some concepts already.
+_The {% post_link "self-taught-ecc-guide-part-1-what-it-is" "first part" %} will mostly cover the theory that will enable you to actually understand what’s happening in this second, more hands-on, part. I do recommend spending time with the theory before diving into the practical stuff, but feel free to skip ahead if you know some concepts already._
 
 ## Key Formats
 
@@ -16,7 +16,7 @@ There are different key formats and encodings for cryptographic keys and other a
 
 ### ASN.1 and DER
 
-Most cryptographic assets (keys, certificates etc.) build on ASN.1, which is a way to describe how to (de)serialize data (think JSON-schema). The most common format for cryptographic assets is DER. An example of an ASN.1 module (data description) and example serialization using DER might look something like this:
+Most cryptographic assets (keys, certificates, etc.) are represented with ASN.1, which is a way to describe how to (de)serialize data (think JSON-schema). The most common format for cryptographic assets is DER. An example of an ASN.1 module (data description) and example serialization using DER might look something like the following:
 
 ```asn1
 Point ::= SEQUENCE {
@@ -26,19 +26,19 @@ Point ::= SEQUENCE {
 }
 ```
 
-In TypeScript the same definition would translate into
+In TypeScript the same definition would translate into:
 
 ```ts
 type Point = [x: number, y: number, label: string]
 ```
 
-An example of a binary DER encoded Point is;
+An example of a binary DER encoded Point is:
 
 ```c
 30 10 02 01 09 02 01 70 12 08 6d 79 20 70 6f 69 6e 74
 ```
 
-The value can be described as the following
+The value can be described as the following:
 
 ```txt
 SEQUENCE (3 elem)
@@ -65,11 +65,11 @@ Let's break down the hex bytes:
         6d 79 20 70 6f 69 6e 74 // "my point" in hex    
 ```
 
-A very good tool for debugging ASN.1 is the [ASN.1 JavaScript decoder](https://lapo.it/asn1js/), which does not only a great job of decoding ASN.1 formats in a readable way, it also interactively visualizes the hex dump so the DER encoding becomes more readable. I do recommend pasting the above example hex (or using this [direct link](https://lapo.it/asn1js/#MBACAQkCAXASCG15IHBvaW50)) and familiarizing yourself with the ASN.1 debugger if you plan on working with "raw" crypto assets.
+A very good tool for debugging ASN.1 is the [ASN.1 JavaScript decoder](https://lapo.it/asn1js/), which does not only a great job of decoding ASN.1 formats in a readable way, but also interactively visualizes the hex dump so the DER encoding becomes more readable. I recommend pasting the above example hex (or using this [direct link](https://lapo.it/asn1js/#MBACAQkCAXASCG15IHBvaW50)) and familiarizing yourself with the ASN.1 debugger if you plan on working with "raw" crypto assets.
 
 ### PEM
 
-PEM is an attempt to make DER a little more comprehensible by encoding the DER as base64 (instead of raw binary) and labeling its contents (i.e. `PUBLIC KEY` or `PRIVATE KEY` etc). An example private key PEM (represented as a SEC1 EC Key, see below) might look something like this;
+PEM is an attempt to make DER a little more comprehensible by encoding the DER as base64 (instead of raw binary) and labeling its contents (i.e. `PUBLIC KEY` or `PRIVATE KEY` etc). An example private key PEM (represented as a SEC1 EC Key, see below) might look something like this:
 
 ```pem
 -----BEGIN EC PRIVATE KEY-----
@@ -83,7 +83,7 @@ As you can see, it starts and ends with a label (`BEGIN|END EC PRIVATE KEY`), an
 
 ### The SEC1 EC Key Format
 
-A private key can be represented in multiple forms but the variant described in SEC 1 (the paper can be found at [Standards for Efficient Cryptography Group's website](http://www.secg.org/)) is common (and the default output OpenSSL uses). Let's introspect the above private key using the ASN.1 debugger (paste it or use [this link](https://lapo.it/asn1js/#MHcCAQEEIJkK9PKZtn_Q27_h9Msl2ThBBPT_7-4Z-HTH7aZl0MEpoAoGCCqGSM49AwEHoUQDQgAEofYx1-G2JhjVczsvvPp7JxemaSKKle0KXG-JHMKy2W0Hy5xcrfhGAi1KShcl0kEC9hEqufN4-UO3HvGMKqY7AA));  
+A private key can be represented in multiple forms but the variant described in SEC 1 (the paper can be found at [Standards for Efficient Cryptography Group's website](http://www.secg.org/)) is common, and is the default output in OpenSSL. Let's introspect the above private key using the ASN.1 debugger. Paste it or use [this link](https://lapo.it/asn1js/#MHcCAQEEIJkK9PKZtn_Q27_h9Msl2ThBBPT_7-4Z-HTH7aZl0MEpoAoGCCqGSM49AwEHoUQDQgAEofYx1-G2JhjVczsvvPp7JxemaSKKle0KXG-JHMKy2W0Hy5xcrfhGAi1KShcl0kEC9hEqufN4-UO3HvGMKqY7AA).
 
 From the ASN.1 debugger:
 
@@ -120,11 +120,11 @@ Hex notation;
         03 42 0004a1f631d7e1b62618d5733b2fbcfa7b2717a669228a95ed0a5c6f891cc2b2d96d07cb9c5cadf846022d4a4a1725d24102f6112ab9f378f943b71ef18c2aa63b00
 ```
 
-Another common standard is [PKCS#8](https://en.wikipedia.org/wiki/PKCS_8) (PKCS is a set of numbered standards, so #8 doesn't mean version 8, it's a completely different standard to i.e. PKCS#12, took me a while to realize), but I will scope that out to keep these blog posts less huge.
+Another common standard is [PKCS#8](https://en.wikipedia.org/wiki/PKCS_8). PKCS is a set of numbered standards, so #8 doesn't mean version 8, it's a completely different standard to i.e. PKCS#12, took me a while to realize. I will scope that out to keep these blog posts less huge.
 
 ### SPKI
 
-[Decoding the PEM](https://lapo.it/asn1js/#MFkwEwYHKoZIzj0CAQYIKoZIzj0DAQcDQgAEofYx1-G2JhjVczsvvPp7JxemaSKKle0KXG-JHMKy2W0Hy5xcrfhGAi1KShcl0kEC9hEqufN4-UO3HvGMKqY7AA) of the corresponding public key, we'll get something looking completely different, because it is encoded in SPKI;
+[Decoding the PEM](https://lapo.it/asn1js/#MFkwEwYHKoZIzj0CAQYIKoZIzj0DAQcDQgAEofYx1-G2JhjVczsvvPp7JxemaSKKle0KXG-JHMKy2W0Hy5xcrfhGAi1KShcl0kEC9hEqufN4-UO3HvGMKqY7AA) of the corresponding public key, we'll get something looking completely different, because it is encoded in SPKI.
 
 ```pem
 -----BEGIN PUBLIC KEY-----
@@ -133,7 +133,7 @@ le0KXG+JHMKy2W0Hy5xcrfhGAi1KShcl0kEC9hEqufN4+UO3HvGMKqY7AA==
 -----END PUBLIC KEY-----
 ```
 
-(This can of course also be described in hex:)
+This can of course also be described in hex:
 
 ```
 30570201010420990af4f299b67fd0dbbfe1f4cb25d9384104f4ffefee19
@@ -151,7 +151,7 @@ SEQUENCE (2 elem)
   BIT STRING (520 bit) 0000010010100001111101100011000111010111111000011011011000100110000110…
 ```
 
-In the case of a NIST P-256 curve the bit string at the end is always also on octet string (but it can also be an "uneven" number of bits for other curves), and can thus be encoded as the following 65-byte (520/8) hex-string:
+In the case of a NIST P-256 curve, the bit string at the end is always also on octet string, but it can also be an "uneven" number of bits for other curves, and can, thus, be encoded as the following 65-byte (520/8) hex-string:
 
 ```txt
 04a1f631d7e1b62618d5733b2fbcfa7b2717a669228a95ed0a5c6f891cc2
@@ -161,17 +161,17 @@ b2d96d07cb9c5cadf846022d4a4a1725d24102f6112ab9f378f943b71ef1
 
 The above hex is a raw and uncompressed public key. It's divided in three parts;
 
-1. The first byte, `04`, indicates that this is indeed uncompressed (if a public key starts with `02` that means it's compressed, and the two coordinates are combined into 32 bytes)
-2. The next 32 bytes is the x-coordinate on the elliptic curve
-3. The 32 bytes after that is the y-coordinate on the elliptic curve
+1. The first byte, `04`, indicates that this is indeed uncompressed (if a public key starts with `02` that means it's compressed, and the two coordinates are combined into 32 bytes).
+2. The next 32 bytes is the x-coordinate on the elliptic curve.
+3. The 32 bytes after that is the y-coordinate on the elliptic curve.
 
 ## NIST P-256 and OpenSSL
 
-Let's dive into some practicalities of how to work with EC keys in OpenSSL
+Let's dive into some practicalities of how to work with EC keys in OpenSSL.
 
 ### Generating a Private Key
 
-Use `openssl ecparam -genkey` to generate the NIST P-256 (aka prime256v1, remember?) private key and store it to the file `mykey.pem`
+Use `openssl ecparam -genkey` to generate the NIST P-256 (aka prime256v1, remember?) private key and store it to the file `mykey.pem`.
 
 ```sh
 $ openssl ecparam -genkey -out mykey.pem -name prime256v1
@@ -179,7 +179,7 @@ $ openssl ecparam -genkey -out mykey.pem -name prime256v1
 
 ### Inspect the private key
 
-First let's take a look at the "raw" pem file (same as under [PEM](#PEM) except it also includes some ec parameters).
+First, let's take a look at the "raw" pem file (same as under [PEM](#PEM) except it also includes some ec parameters).
 
 ```sh
 $ cat mykey.pem
@@ -193,7 +193,7 @@ Ai1KShcl0kEC9hEqufN4+UO3HvGMKqY7AA==
 -----END EC PRIVATE KEY-----
 ```
 
-Here's how we will inspect the key. `-text` shows us the data in human-readable form (so we don't only get the pem). As you can see it has the same data as the decoded [SEC1 EC Key DER](#The-SEC1-EC-Key-Format) (it's just displayed differently).
+Here's how we will inspect the key. `-text` shows us the data in human-readable form (so we don't only get the pem). As you can see it has the same data as the decoded [SEC1 EC Key DER](#The-SEC1-EC-Key-Format), it's just displayed differently.
 
 ```sh
 $ openssl ec -text -in mykey.pem
@@ -219,13 +219,13 @@ Ai1KShcl0kEC9hEqufN4+UO3HvGMKqY7AA==
 -----END EC PRIVATE KEY-----
 ```
 
-As you can see, our private key here is
+As you can see, our private key here is:
 
 ```
 00990af4f299b67fd0dbbfe1f4cb25d9384104f4ffefee19f874c7eda665d0c129
 ```
 
-and our (raw uncompressed) public key is embedded as
+and our (raw uncompressed) public key is embedded as:
 
 ```
 04a1f631d7e1b62618d5733b2fbcfa7b2717a669228a95ed0a5c6f891cc2
@@ -261,7 +261,7 @@ le0KXG+JHMKy2W0Hy5xcrfhGAi1KShcl0kEC9hEqufN4+UO3HvGMKqY7AA==
 -----END PUBLIC KEY-----
 ```
 
-To derive a public key pem file, (sometimes suffixed with `.pub`) you can omit `-text` and just use `-out` to write the resulting pem;
+To derive a public key pem file, (sometimes suffixed with `.pub`) you can omit `-text` and just use `-out` to write the resulting pem:
 
 ```sh
 $ openssl ec -in mykey.pem -pubout -out mykey.pub
@@ -297,11 +297,11 @@ le0KXG+JHMKy2W0Hy5xcrfhGAi1KShcl0kEC9hEqufN4+UO3HvGMKqY7AA==
 
 ## Key Fingerprinting
 
-A common way of identifying key pairs is by using key fingerprinting. A key fingerprint is commonly just a hash (or part of a hash) of the public key. However, when you do make a fingerprint of a key, it is extremely important that you always use the same (expected) form of public key. As you should understand by now, performing `sha256(public key pem)` will yield something completely different to performing `sha256(raw uncompressed public key)`, just like `sha256(spki-encoded public key)` will be equally different. In addition, `sha256(hex encoded uncompressed public key)` will be completely different from `sha256(raw uncompressed public key)`.
+A common way of identifying key pairs is by using key fingerprinting. A key fingerprint is commonly just a hash (or part of a hash) of the public key. However, when you do make a fingerprint of a key, it is extremely important that you always use the same (expected) form of public key. As you should understand by now, performing `sha256(public key pem)` will yield something completely different to performing `sha256(raw uncompressed public key)` - just like `sha256(spki-encoded public key)` will be equally different. In addition, `sha256(hex encoded uncompressed public key)` will be completely different from `sha256(raw uncompressed public key)`.
 
-A common application of key fingerprinting is within the crypto-currency community. For example, Ethereum addresses are just public key fingerprints. They are derived from the public key by using the last 20 bytes of a hash of the raw uncompressed form of the public key (without the leading `04` byte). It's not an optimal example because Ethereum uses curve secp256k1 public keys (instead of secp256r1 that I've described so far, but from what I've understood they are very similar), and Keccak-256 hashing (that later evolved into SHA3, but they are not the same), while I've described SHA256. However, the principle is exactly the same.
+A common application of key fingerprinting is within the crypto-currency community. For example, Ethereum addresses are just public key fingerprints. They are derived from the public key by using the last 20 bytes of a hash of the raw uncompressed form of the public key (without the leading `04` byte). It's not an optimal example because Ethereum uses curve secp256k1 public keys instead of secp256r1 that I've described so far, but from what I've understood they are very similar. Also, it uses Keccak-256 hashing while I've described SHA256. However, the principle is exactly the same.
 
-An Ethereum address can thus be derived from its public key by using; `last_20_bytes(Keccak256(raw public key))`. Here's an example (you can try it by using an [online keccak-256 hasher](https://emn178.github.io/online-tools/keccak_256.html));
+An Ethereum address can thus be derived from its public key by using; `last_20_bytes(Keccak256(raw public key))`. Here's an example - you can try it by using an [online keccak-256 hasher](https://emn178.github.io/online-tools/keccak_256.html):
 
 ```text
 Raw uncompressed public key:
@@ -321,12 +321,12 @@ Taking the last 20 bytes (40 hex characters) gives us the address (prefixed with
 0x00b54e93ee2eba3086a55f4249873e291d1ab06c
 ```
 
-You can validate it by using an [Ethereum key-to-address converter](https://toolkit.abdk.consulting/ethereum#recover-address,key-to-address). Commonly Ethereum hex strings are prefixed with `0x`, but as you know this is not part of the hex value.
+You can validate it by using an [Ethereum key-to-address converter](https://toolkit.abdk.consulting/ethereum#recover-address,key-to-address). Commonly Ethereum hex strings are prefixed with `0x`, but, as you know this is not part of the hex value.
 
 ## Conclusion
 
-There's many moving parts in cryptography, and I'd recommend doing as little as possible yourself, but with this knowledge you should at least know a little more about the libraries you use. They all do the same things ultimately, and mostly it is OpenSSL doing the real work under the hood.
+There's many moving parts in cryptography, and I'd recommend doing as little as possible yourself. However, with this knowledge you should at least know a little more about the libraries you use. They all do the same things ultimately, and mostly it is OpenSSL doing the real work under the hood.
 
-There are some essential parts to ECC that I've purposely omitted because it's just too much to cover in a couple of blog posts. But expect a follow-up describing signing/verifying content with ECDSA and maybe something on symmetric cryptography and Diffie-Hellman Key Exchange (DH/ECDH).
+There are some essential parts to ECC that I've purposely omitted because it's just too much to cover in a couple of blog posts, but expect a follow-up describing signing/verifying content with ECDSA and maybe something on symmetric cryptography and Diffie-Hellman Key Exchange (DH/ECDH).
 
-If you found this useful, or not (or if you found any issues), please do let me know on [Twitter](https://twitter.com/palmenhq)! Congratulations and thanks for making it all the way 🌞
+If you found this useful, or not (or ,if you found any issues), please do let me know on [Twitter](https://twitter.com/palmenhq)! Congratulations and thanks for making it all the way! 🌞
