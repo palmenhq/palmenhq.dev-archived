@@ -24,8 +24,9 @@ nav:
 # only 'mail' is an exception.
 social_links:
   github: https://github.com/palmenhq
-  twitter: https://twitter.com/palmenhq
-  mail: mailto:johan.palmfjord@gmail.com
+  linkedin: https://www.linkedin.com/in/johan-palmfjord-37633758/
+  mail: mailto:johan.palmfjord@pm.me
+
 
 # Customize the overview with displaying a tagcloud on the index page.
 # Options: https://hexo.io/docs/helpers.html#tagcloud

@@ -30,6 +30,8 @@ category_dir: categories
 code_dir: downloads/code
 i18n_dir: :lang
 skip_render:
+  - 'static/**/*'
+  - 'identity/**/*'
 
 # Writing
 new_post_name: :title.md # File name of new posts
@@ -102,6 +104,7 @@ theme: cactus
 social_links:
   github: https://github.com/palmenhq
   twitter: https://twitter.com/palmenhq
+  linkedin: https://www.linkedin.com/in/johan-palmfjord-37633758/
 
 # Deployment
 ## Docs: https://hexo.io/docs/one-command-deployment
